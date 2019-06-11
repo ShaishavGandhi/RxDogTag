@@ -98,28 +98,29 @@ private fun printResults(type: ResultType, results: List<Analysis>) {
 
 private fun String.isFlowable(): Boolean = "flowable" in this
 private fun String.isObservable(): Boolean = "observable" in this
+private fun String.isSubscribeThroughput(): Boolean = "times=0" in this
 
 private enum class ResultType(val description: String, val groupings: List<Grouping>) {
   THROUGHPUT(
       description = "Event throughput: grouped by number of events",
       groupings = listOf(
           Grouping("1 item (observable)") {
-            "1_" in it && it.isObservable()
+            "=1]" in it && it.isObservable()
           },
           Grouping("1 item (flowable)") {
-            "1_" in it && it.isFlowable()
+            "=1]" in it && it.isFlowable()
           },
           Grouping("1000 items (observable)") {
-            "1000_" in it && it.isObservable()
+            "=1,000]" in it && it.isObservable()
           },
           Grouping("1000 items (flowable)") {
-            "1000_" in it && it.isFlowable()
+            "=1,000]" in it && it.isFlowable()
           },
           Grouping("1000000 items (observable)") {
-            "1000000_" in it && it.isObservable()
+            "=1,000,000]" in it && it.isObservable()
           },
           Grouping("1000000 items (flowable)") {
-            "1000000_" in it && it.isFlowable()
+            "=1,000,000]" in it && it.isFlowable()
           }
       )
   ),
@@ -127,16 +128,22 @@ private enum class ResultType(val description: String, val groupings: List<Group
       description = "Subscribe cost: grouped by complexity",
       groupings = listOf(
           Grouping("Simple (observable)") {
-            "subscribe" in it && "simple" in it && it.isObservable()
+            "simple" in it && it.isSubscribeThroughput() && it.isObservable()
           },
           Grouping("Simple (flowable)") {
-            "subscribe" in it && "simple" in it && it.isFlowable()
+            "simple" in it && it.isSubscribeThroughput() && it.isFlowable()
           },
           Grouping("Complex (observable)") {
-            "subscribe" in it && "complex" in it && it.isObservable()
+            "complex" in it && it.isSubscribeThroughput() && it.isObservable()
           },
           Grouping("Complex (flowable)") {
-            "subscribe" in it && "complex" in it && it.isFlowable()
+            "complex" in it && it.isSubscribeThroughput() && it.isFlowable()
+          },
+          Grouping("Complex (observable)") {
+            "e2e" in it && it.isSubscribeThroughput() && it.isObservable()
+          },
+          Grouping("Complex (flowable)") {
+            "e2e" in it && it.isSubscribeThroughput() && it.isFlowable()
           }
       )
   ),
